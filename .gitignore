@@ -1,0 +1,8 @@
+aws-net-env/
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfvars
+crash.log
+*.tfplan
+*.DS_Store
