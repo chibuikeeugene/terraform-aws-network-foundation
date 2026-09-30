@@ -1,4 +1,3 @@
-
 # AWS Production Infrastructure Foundation
 
 ## Business Scenario
@@ -7,7 +6,7 @@ Why NovaPay needs the infrastructure.
 
 ## Architecture
 
-Architecture diagram.
+![Architecture diagram] (architecture/aws-network-architecture-diagram.png)
 
 ## Infrastructure
 
