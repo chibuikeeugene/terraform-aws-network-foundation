@@ -5,7 +5,8 @@ provider "aws" {
     tags = {
       ManagedBy = "Platform engineering team"
       Project   = var.project_name
-      Purpose   = "Terraform State"
+      Purpose   = "Terraform AWS network infrastructure"
+      Environment = var.environment
     }
   }
 }
