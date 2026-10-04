@@ -18,13 +18,14 @@ VPC/subnets/routing/NAT/etc.
 
 #### Why two AZs are used:
 
-1. Improving
+1. Reduces single point of failure
+2. Higher reliability and resilience(fault tolerance)
 
 #### Why modules are used:
 
 1. Reusable across multiple environments
 2. Testability
-3. 
+3. Easily version controlled
 
 #### Why for_each was selected:
 
@@ -39,31 +40,52 @@ VPC/subnets/routing/NAT/etc.
 
 ## Repository Structure
 
+terraform-aws-network
+
+	|-----architecture
+
+	|-----bootstrap-backend
+
+	|-----environments
+
+		|-----dev
+
+	|-----modules
+
+		|-----network
+
+	|-----gitignore
+
+	|-----readme
+
 ## Prerequisites
+
+1. Install terraform
+2. clone repo
+3. setup virtual env
 
 ## Deployment
 
-terraform init
-terraform plan
-terraform apply
+* terraform init
+* terraform plan
+* terraform apply
 
 ## Validation
 
 ## Security Considerations
 
-Public subnet
-    ↓
-can route to Internet Gateway
+* Public subnet
+      ↓
+  can route to Internet Gateway
+* Private application subnet
+      ↓
+  does NOT route directly to Internet Gateway
+      ↓
+  NAT provides outbound connectivity
 
-Private application subnet
-    ↓
-does NOT route directly to Internet Gateway
-    ↓
-NAT provides outbound connectivity
-
-Private database subnet
-    ↓
-does NOT have direct Internet routing
+* Private database subnet
+      ↓
+  does NOT have direct Internet routing
 
 ## Cost Considerations
 

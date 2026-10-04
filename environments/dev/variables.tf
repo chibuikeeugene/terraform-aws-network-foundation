@@ -38,8 +38,16 @@ variable "public_subnets" {
   }))
 }
 
-variable "private_subnets" {
-  description = "The private subnets to create"
+variable "private_subnets_app" {
+  description = "The private subnets of the application to create"
+  type = map(object({
+    cidr = string
+    availability_zone = string
+  }))
+}
+
+variable "private_subnets_db" {
+  description = "The private subnets of the database to create"
   type = map(object({
     cidr = string
     availability_zone = string
