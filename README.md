@@ -19,7 +19,7 @@ VPC/subnets/routing/NAT/etc.
 #### Why two AZs are used:
 
 1. Reduces single point of failure
-2. Higher reliability
+2. Higher reliability and resilience(fault tolerance)
 
 #### Why modules are used:
 
@@ -61,7 +61,8 @@ terraform-aws-network
 ## Prerequisites
 
 1. Install terraform
-1. 
+2. clone repo
+3. setup virtual env
 
 ## Deployment
 
