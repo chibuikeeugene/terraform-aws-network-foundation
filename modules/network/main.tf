@@ -40,7 +40,7 @@ resource "aws_subnet" "public" {
 }
 
 # setup our 4 private subnets
-resource "aws_subnet" "private" {
+resource "aws_subnet" "private_app" {
   for_each = var.private_subnets
 
   vpc_id = aws_vpc.this.id
@@ -57,12 +57,27 @@ resource "aws_subnet" "private" {
 
 # setup route table for public subnets
 resource "aws_route_table" "public" {
-  
+    vpc_id = aws_vpc.this.id
+    tags = merge(
+        var.tags,
+        {
+            Name = "${var.name_prefix}-public-rt"
+        }
+    )
 }
 
 # setup route table for private app subnet
-resource "aws_route_table" "private_app" {
-  
+resource "aws_route_table" "private" {
+  vpc_id = aws_vpc.this.id
+  for_each = var.private_subnets
+
+  tags = merge(
+    var.tags,
+    {
+        Name = "${var.name_prefix}-${each.key}-rt"
+    }
+  )
+
 }
 
 # setup route table for private db subnet
