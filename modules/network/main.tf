@@ -126,20 +126,30 @@ resource "aws_nat_gateway" "public" {
 
 # add routes to public route table
 resource "aws_route" "internet" {
-  
+  route_table_id = aws_route_table.public.id
+  destination_cidr_block = "0.0.0.0/0"
+  gateway_id = aws_internet_gateway.igw.id
 }
 
+# add routes to the private_app route table
 resource "aws_route" "internal" {
-  
+  for_each = aws_route_table.private_app
+  route_table_id = each.value.id
+  destination_cidr_block = "0.0.0.0/0"
+  nat_gateway_id = aws_nat_gateway.public[local.private_to_public_nat[each.key]].id 
 }
 
 # add associate route table with  subnets
 resource "aws_route_table_association" "public" {
-  
+  for_each = aws_subnet.public
+  route_table_id = aws_route_table.public.id
+  subnet_id = each.value.id
 }
 
 resource "aws_route_table_association" "private_app" {
-  
+  for_each = aws_subnet.private_app
+  route_table_id = aws_route_table.private_app[each.key].id
+  subnet_id = each.value.id
 }
 
 resource "aws_route_table_association" "private_db" {
