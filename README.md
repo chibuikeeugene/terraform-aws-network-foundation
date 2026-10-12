@@ -6,7 +6,7 @@ NovaPay a fintech organization deploys its first containerized production applic
 
 ## Architecture
 
-![Architecture diagram](image/README/1790869557321.png)
+![Architecture diagram](architecture/nova-arch.png)
 
 ## Infrastructure
 
