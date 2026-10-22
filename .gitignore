@@ -6,3 +6,4 @@ aws-net-env/
 crash.log
 tfplan
 *.DS_Store
+*.log
