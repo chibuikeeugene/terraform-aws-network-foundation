@@ -112,4 +112,4 @@ Implement security controls based on two principles:
 
 ## Architecture - Phase 2
 
-![Architecture](architecture/)
+![Architecture](architecture/nova-security-arch.png)
