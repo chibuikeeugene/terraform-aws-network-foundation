@@ -11,3 +11,10 @@ module "novapay_network" {
   name_prefix = "${var.project_name}-${var.environment}"
   
 }
+
+module "novapay_security" {
+  source = "../../modules/security"
+  project_name = var.project_name
+  environment = var.environment
+  vpc_id = module.novapay_network.vpc_id
+}
