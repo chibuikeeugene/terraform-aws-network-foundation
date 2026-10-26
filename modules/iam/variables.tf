@@ -13,3 +13,8 @@ variable "tags" {
   type = map(string)
   default = {}
 }
+
+variable "ecs_task_execution_name" {
+  description = "The name given to the ecs task execution role"
+  type = string
+}

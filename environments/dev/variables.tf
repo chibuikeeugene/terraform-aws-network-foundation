@@ -53,3 +53,8 @@ variable "private_subnets_db" {
     availability_zone = string
   }))
 }
+
+variable "ecs_task_execution_name" {
+  description = "The name given to the ecs task execution role"
+  type = string
+}
