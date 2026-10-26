@@ -18,3 +18,11 @@ module "novapay_security" {
   environment = var.environment
   vpc_id = module.novapay_network.vpc_id
 }
+
+
+module "novapay_iam" {
+  source = "../../modules/iam"
+  project_name = var.project_name
+  environment = var.environment
+  ecs_task_execution_name = var.ecs_task_execution_name
+}
