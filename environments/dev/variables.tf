@@ -33,7 +33,7 @@ variable "vpc_cidr_block" {
 variable "public_subnets" {
   description = "The public subnets to create"
   type = map(object({
-    cidr_block = string
+    cidr_block        = string
     availability_zone = string
   }))
 }
@@ -41,7 +41,7 @@ variable "public_subnets" {
 variable "private_subnets_app" {
   description = "The private subnets of the application to create"
   type = map(object({
-    cidr_block = string
+    cidr_block        = string
     availability_zone = string
   }))
 }
@@ -49,12 +49,12 @@ variable "private_subnets_app" {
 variable "private_subnets_db" {
   description = "The private subnets of the database to create"
   type = map(object({
-    cidr_block = string
+    cidr_block        = string
     availability_zone = string
   }))
 }
 
 variable "ecs_task_execution_name" {
   description = "The name given to the ecs task execution role"
-  type = string
+  type        = string
 }
