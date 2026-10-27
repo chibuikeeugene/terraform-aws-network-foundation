@@ -10,11 +10,11 @@ variable "environment" {
 
 variable "vpc_id" {
   description = "The ID of the novapay VPC"
-  type = string
+  type        = string
 }
 
 variable "tags" {
   description = "common resource tags"
-  type = map(string)
-  default = {}
+  type        = map(string)
+  default     = {}
 }

@@ -10,11 +10,11 @@ variable "environment" {
 
 variable "tags" {
   description = "common resource tags"
-  type = map(string)
-  default = {}
+  type        = map(string)
+  default     = {}
 }
 
 variable "ecs_task_execution_name" {
   description = "The name given to the ecs task execution role"
-  type = string
+  type        = string
 }

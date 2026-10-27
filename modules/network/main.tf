@@ -1,12 +1,12 @@
 # setup vpc infrastructure
 resource "aws_vpc" "this" {
-  cidr_block = var.vpc_cidr_block
+  cidr_block           = var.vpc_cidr_block
   enable_dns_hostnames = true
-  enable_dns_support = true
+  enable_dns_support   = true
   tags = merge(
     var.tags,
     {
-        Name = "${var.name_prefix}-vpc"
+      Name = "${var.name_prefix}-vpc"
     }
   )
 }
@@ -17,7 +17,7 @@ resource "aws_internet_gateway" "igw" {
   tags = merge(
     var.tags,
     {
-        Name = "${var.name_prefix}-igw"
+      Name = "${var.name_prefix}-igw"
     }
   )
 }
@@ -27,14 +27,14 @@ resource "aws_subnet" "public" {
   # we loop through our public subnet variable
   for_each = var.public_subnets
 
-  vpc_id = aws_vpc.this.id
-  cidr_block = each.value.cidr_block
+  vpc_id            = aws_vpc.this.id
+  cidr_block        = each.value.cidr_block
   availability_zone = each.value.availability_zone
   tags = merge(
     var.tags,
     {
-        Name = "${var.name_prefix}-${each.key}"
-        Tier = "Public"
+      Name = "${var.name_prefix}-${each.key}"
+      Tier = "Public"
     }
   )
 }
@@ -43,63 +43,63 @@ resource "aws_subnet" "public" {
 resource "aws_subnet" "private_app" {
   for_each = var.private_subnets_app
 
-  vpc_id = aws_vpc.this.id
-  cidr_block = each.value.cidr_block
+  vpc_id            = aws_vpc.this.id
+  cidr_block        = each.value.cidr_block
   availability_zone = each.value.availability_zone
   tags = merge(
     var.tags,
     {
-        Name = "${var.name_prefix}-${each.key}"
+      Name = "${var.name_prefix}-${each.key}"
     }
   )
 }
 resource "aws_subnet" "private_db" {
   for_each = var.private_subnets_db
 
-  vpc_id = aws_vpc.this.id
-  cidr_block = each.value.cidr_block
+  vpc_id            = aws_vpc.this.id
+  cidr_block        = each.value.cidr_block
   availability_zone = each.value.availability_zone
   tags = merge(
     var.tags,
     {
-        Name = "${var.name_prefix}-${each.key}"
+      Name = "${var.name_prefix}-${each.key}"
     }
   )
 }
 
 # setup route table for public subnets
 resource "aws_route_table" "public" {
-    vpc_id = aws_vpc.this.id
-    tags = merge(
-        var.tags,
-        {
-            Name = "${var.name_prefix}-public-rt"
-        }
-    )
+  vpc_id = aws_vpc.this.id
+  tags = merge(
+    var.tags,
+    {
+      Name = "${var.name_prefix}-public-rt"
+    }
+  )
 }
 
 # setup route table for private app subnet
 resource "aws_route_table" "private_app" {
-  vpc_id = aws_vpc.this.id
+  vpc_id   = aws_vpc.this.id
   for_each = var.private_subnets_app
 
   tags = merge(
     var.tags,
     {
-        Name = "${var.name_prefix}-${each.key}-rt"
+      Name = "${var.name_prefix}-${each.key}-rt"
     }
   )
 }
 
 # setup route table for private db subnet
 resource "aws_route_table" "private_db" {
-  vpc_id = aws_vpc.this.id
+  vpc_id   = aws_vpc.this.id
   for_each = var.private_subnets_db
 
   tags = merge(
     var.tags,
     {
-        Name = "${var.name_prefix}-${each.key}-rt"
+      Name = "${var.name_prefix}-${each.key}-rt"
     }
   )
 }
@@ -107,53 +107,53 @@ resource "aws_route_table" "private_db" {
 # to create a NAT resource we need an elastic ip, so we create an EIP Resource
 resource "aws_eip" "nat" {
   for_each = var.public_subnets
-  domain = "vpc"
+  domain   = "vpc"
   tags = {
     Name = "nat-eip-${each.key}"
   }
 }
 # setting up NAT gateway resource
 resource "aws_nat_gateway" "public" {
-  for_each = var.public_subnets
+  for_each      = var.public_subnets
   allocation_id = aws_eip.nat[each.key].id
-  subnet_id = aws_subnet.public[each.key].id
-  
+  subnet_id     = aws_subnet.public[each.key].id
+
   tags = {
     Name = "nat-gateway-${each.key}"
   }
-  depends_on = [ aws_internet_gateway.igw ]
+  depends_on = [aws_internet_gateway.igw]
 }
 
 # add routes to public route table
 resource "aws_route" "internet" {
-  route_table_id = aws_route_table.public.id
+  route_table_id         = aws_route_table.public.id
   destination_cidr_block = "0.0.0.0/0"
-  gateway_id = aws_internet_gateway.igw.id
+  gateway_id             = aws_internet_gateway.igw.id
 }
 
 # add routes to the private_app route table
 resource "aws_route" "internal" {
-  for_each = aws_route_table.private_app
-  route_table_id = each.value.id
+  for_each               = aws_route_table.private_app
+  route_table_id         = each.value.id
   destination_cidr_block = "0.0.0.0/0"
-  nat_gateway_id = aws_nat_gateway.public[local.private_to_public_nat[each.key]].id 
+  nat_gateway_id         = aws_nat_gateway.public[local.private_to_public_nat[each.key]].id
 }
 
 # add associate route table with  subnets
 resource "aws_route_table_association" "public" {
-  for_each = aws_subnet.public
+  for_each       = aws_subnet.public
   route_table_id = aws_route_table.public.id
-  subnet_id = each.value.id
+  subnet_id      = each.value.id
 }
 
 resource "aws_route_table_association" "private_app" {
-  for_each = aws_subnet.private_app
+  for_each       = aws_subnet.private_app
   route_table_id = aws_route_table.private_app[each.key].id
-  subnet_id = each.value.id
+  subnet_id      = each.value.id
 }
 
 resource "aws_route_table_association" "private_db" {
-  for_each = aws_subnet.private_db
+  for_each       = aws_subnet.private_db
   route_table_id = aws_route_table.private_db[each.key].id
-  subnet_id = each.value.id
+  subnet_id      = each.value.id
 }
