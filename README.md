@@ -95,7 +95,7 @@ Implement security controls based on two principles:
 1. Network least privilege: Only explicitly authorized communication should be permitted.
 2. IAM least privilege: AWS identities should receive only the permissions required to perform their responsibilities.
 
-## Technical requirements 
+## Technical requirements
 
 | ID      | Requirement                           | Acceptance Criteria                                    |
 | ------- | ------------------------------------- | ------------------------------------------------------ |
@@ -108,8 +108,24 @@ Implement security controls based on two principles:
 | SEC-007 | IAM trust policies                    | Allow only the appropriate AWS service to assume roles |
 | SEC-008 | Terraform reusability                 | Implement reusable security and IAM modules            |
 | SEC-009 | Validation                            | Verify policies, network rules, and Terraform plans    |
-| SEC-010 | Documentation                         | Record architecture, decisions, and troubleshooting    |
+| SEC-010 | Documentation                         | Record architecture, decisions                         |
 
 ## Architecture - Phase 2
 
 ![Architecture](architecture/nova-security-arch.png)
+
+
+### IAM role design
+
+- ECS execution role.
+  - Enables and facilitates actions such as writing logs to cloudwatch and pulling image from ECR
+- ECS application task role.
+  - Enables the novapay app to perform actions like read secrets or configs from other api services
+- IAM trust policies.
+  - Enables ECS iam role to assume other certain role - in this case sts needed to gain temporary credentials for downstream tasks
+- IAM permission policies.
+  - Defines the actions an existing role can actual perform or do.
+
+### Business case 2 deliverable:
+
+A reusable, Terraform-managed security foundation with three security groups, separate ECS IAM roles, validated access controls, and documented security decisions.
