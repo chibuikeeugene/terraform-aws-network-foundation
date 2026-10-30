@@ -86,7 +86,7 @@ does NOT have direct Internet routing
 
 ## Assets:
 
-[vpc-assets](architecture/images)
+[vpc-assets](architecture/)
 
 ## Business case 2
 
@@ -114,7 +114,6 @@ Implement security controls based on two principles:
 
 ![Architecture](architecture/nova-security-arch.png)
 
-
 ### IAM role design
 
 - ECS execution role.
@@ -129,3 +128,27 @@ Implement security controls based on two principles:
 ### Business case 2 deliverable:
 
 A reusable, Terraform-managed security foundation with three security groups, separate ECS IAM roles, validated access controls, and documented security decisions.
+
+
+## Business case 3
+
+Implement the container artifact management infrastructure needed for a centralized, secure, versioned container image registry.
+
+## Architecture - phase 3
+
+![nova-ecr-arch](architecture/nova-ecr-arch.png)
+
+## Technical requirements
+
+| ID      | Business requirement       | Expected outcome                                   |
+| ------- | -------------------------- | -------------------------------------------------- |
+| ECR-001 | Private container registry | Terraform-managed ECR repository                   |
+| ECR-002 | Containerize payment API   | Working Docker image                               |
+| ECR-003 | Immutable image versions   | Prevent overwriting release tags                   |
+| ECR-004 | Vulnerability scanning     | Scan images for known vulnerabilities              |
+| ECR-005 | Image retention            | Automated lifecycle policy                         |
+| ECR-006 | Encryption                 | ECR encryption at rest                             |
+| ECR-007 | Least-privilege publishing | IAM policy restricted to designated repository     |
+| ECR-008 | Traceability               | Version and Git commit tagging                     |
+| ECR-009 | Validation                 | Verify push, scan configuration and image metadata |
+| ECR-010 | Documentation              | Reproducible deployment and troubleshooting guide  |
