@@ -58,3 +58,8 @@ variable "ecs_task_execution_name" {
   description = "The name given to the ecs task execution role"
   type        = string
 }
+
+variable "common_tags" {
+  description = "Common tags"
+  type        = map(string)
+}
