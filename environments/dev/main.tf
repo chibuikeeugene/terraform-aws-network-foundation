@@ -26,3 +26,9 @@ module "novapay_iam" {
   environment             = var.environment
   ecs_task_execution_name = var.ecs_task_execution_name
 }
+
+module "novapay_ecr" {
+  source          = "../../modules/ecr"
+  repository_name = "${var.project_name}-${var.environment}-payment-api"
+  tags            = var.common_tags
+}
