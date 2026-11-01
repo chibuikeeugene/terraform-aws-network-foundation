@@ -38,3 +38,39 @@ resource "aws_iam_role" "ecs_task" {
   assume_role_policy = data.aws_iam_policy_document.ecs_assume_role.json
   tags               = var.tags
 }
+
+# iam policy publishing resource via a data and resource block
+data "aws_iam_policy_document" "ecr_push" {
+  statement {
+    sid    = "GetECRAuthorizationToken"
+    effect = "Allow"
+
+    actions = [
+      "ecr:GetAuthorizationToken"
+    ]
+
+    resources = ["*"]
+  }
+
+  statement {
+    sid    = "PushPaymentImages"
+    effect = "Allow"
+
+    actions = [
+      "ecr:BatchCheckLayerAvailability",
+      "ecr:InitiateLayerUpload",
+      "ecr:UploadLayerPart",
+      "ecr:CompleteLayerUpload",
+      "ecr:PutImage"
+    ]
+
+    resources = [
+      module.ecr.repository_arn
+    ]
+  }
+}
+
+resource "aws_iam_policy" "ecr_push" {
+  name   = "novapay-dev-ecr-push"
+  policy = data.aws_iam_policy_document.ecr_push.json
+}

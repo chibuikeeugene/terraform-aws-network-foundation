@@ -1,0 +1,16 @@
+aws-net-env/
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfvars
+crash.log
+tfplan
+*.DS_Store
+*.log
+__pycache__/
+.git
+__pycache__
+*.pyc
+.pytest_cache
+.env
+tests/
