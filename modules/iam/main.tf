@@ -65,7 +65,7 @@ data "aws_iam_policy_document" "ecr_push" {
     ]
 
     resources = [
-      module.ecr.repository_arn
+      var.repository_arn
     ]
   }
 }

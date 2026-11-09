@@ -86,7 +86,7 @@ does NOT have direct Internet routing
 
 ## Assets:
 
-[vpc-assets](architecture/)
+[vpc-assets](architecture/network_images/)
 
 ## Business case 2
 
@@ -129,6 +129,9 @@ Implement security controls based on two principles:
 
 A reusable, Terraform-managed security foundation with three security groups, separate ECS IAM roles, validated access controls, and documented security decisions.
 
+### Assets:
+
+[iam assets](architecture/iam_security_images/)
 
 ## Business case 3
 
@@ -152,3 +155,44 @@ Implement the container artifact management infrastructure needed for a centrali
 | ECR-008 | Traceability               | Version and Git commit tagging                     |
 | ECR-009 | Validation                 | Verify push, scan configuration and image metadata |
 | ECR-010 | Documentation              | Reproducible deployment and troubleshooting guide  |
+
+### Immutability and encryption at rest
+
+[ecr encryption and immutability declaration](modules/ecr/main.tf)
+
+![img](architecture/ecr_images/encryption_at_rest_and_immutability.png)
+
+
+### Image lifecycle policy
+
+![ecr lifecycle policy](architecture/ecr_images/image_lifecycle_policy.png)
+
+### Image vulnerability scanning outcome
+
+![ecr vulnerability scan](architecture/ecr_images/image_vulnerability_scan.png)
+
+
+## Business case 4
+
+* To build a reusable Terraform module (ecs) that deploys the application securely into the existing private application subnets.
+
+## Target architecture
+
+![img]()
+
+### Business requirements and acceptance criteria
+
+| ID      | Requirement     | Acceptance criteria                     |
+| ------- | --------------- | --------------------------------------- |
+| ECS-001 | Cluster         | Terraform creates one ECS cluster       |
+| ECS-002 | Task definition | Fargate,`awsvpc`networking            |
+| ECS-003 | Container       | Uses the image published on ecr         |
+| ECS-004 | Compute         | 0.25 vCPU, 512 MiB memory               |
+| ECS-005 | Availability    | Service desired count of 2              |
+| ECS-006 | Networking      | Private subnets, no public IP           |
+| ECS-007 | Security        | Reuse application security group        |
+| ECS-008 | IAM             | Reuse separate task and execution roles |
+| ECS-009 | Logging         | CloudWatch Logs with retention          |
+| ECS-010 | Recovery        | ECS replaces stopped or failed tasks    |
+| ECS-011 | Deployment      | Controlled rolling deployments          |
+| ECS-012 | Verification    | ECS events and log inspection           |
