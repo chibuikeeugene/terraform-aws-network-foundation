@@ -18,3 +18,7 @@ variable "ecs_task_execution_name" {
   description = "The name given to the ecs task execution role"
   type        = string
 }
+
+variable "repository_arn" {
+  type = string
+}
